@@ -46,7 +46,7 @@ map.addControl(geocoder);
 function getSubmissions() {
   JF.getFormSubmissions("223194308131044", function (responses) {
     // array to store all the submissions: we will use this to create the map
-    console.log(responses)
+    // console.log("Responses", responses);
     const submissions = [];
     // for each responses
     for (var i = 0; i < responses.length; i++) {
@@ -70,9 +70,18 @@ function getSubmissions() {
         }
         const lookup = "name";
         const entry = responses[i].answers[answer].name;
+        // console.log("Entry", entry)
 
-        if (entry === "latitude" || entry === "longitude") {
+  
+
+        if (entry === "latitude" || entry === "number9") {
           currentAnswer = parseFloat(currentAnswer);
+          // console.log("Current Answer",currentAnswer)
+        }
+
+        if(entry == "number9"){
+          currentAnswer = parseFloat(currentAnswer);
+          submissionProps.properties.longitude = currentAnswer;
         }
 
         submissionProps.properties[responses[i].answers[answer][lookup]] =
@@ -84,11 +93,17 @@ function getSubmissions() {
         submissionProps.properties.latitude,
       ];
 
+      // console.log(submissionProps.geometry["coordinates"])
+      // console.log(submissionProps.properties.longitude)
+      // console.log(submissionProps.properties.latitude)
+
       // add submission to submissions array
       submissions.push(submissionProps);
 
      
     }
+
+    console.log("Submissions", submissions);
 
 
     // see if the source exists
